@@ -93,7 +93,7 @@ export const sendDtmfDigits = async (event) => {
 }
 /**
  * Params required
- * time -> Time when the digits sent
+ * time -> Time when sendDtmfDigits function invoked
  * dtmfDigits -> Digit to validate
  */
 export const verifyDtmfDigits = async (event) => {

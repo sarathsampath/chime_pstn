@@ -10,8 +10,15 @@ export const lambdaHandler = async (event) => {
     case 'NEW_INBOUND_CALL':
         console.log('NEW_INBOUND_CALL');
         return {
-            SchemaVersion: '1.0',
-            Actions: []
+          SchemaVersion: '1.0',
+          Actions: [{
+            Type: 'ReceiveDigits',
+            Parameters: {
+              InputDigitsRegex: '.*',
+              InBetweenDigitsDurationInMilliseconds: 1000,
+              FlushDigitsDurationInMilliseconds: 100000
+            }
+          }]
         };
     case 'DIGITS_RECEIVED':
         return await handleDigitsReceived(
