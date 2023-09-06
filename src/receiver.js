@@ -1,4 +1,8 @@
 const AWS = require('aws-sdk');
+
+// Configure AWS SDK (Make sure your AWS credentials are properly set up)
+AWS.config.update({ region: 'your-dynamodb-region' });
+
 // noinspection JSUnusedGlobalSymbols
 export const lambdaHandler = async (event) => {
 
@@ -10,15 +14,13 @@ export const lambdaHandler = async (event) => {
             Actions: []
         };
     case 'DIGITS_RECEIVED':
-        return {
-            SchemaVersion: '1.0',
-            Actions: []
-        };
+        return await handleDigitsReceived(
+          event.ActionData
+        );
     case 'ACTION_SUCCESSFUL':
       if (event.ActionData && event.ActionData.Type === 'ReceiveDigits') {
         return await handleDigitsReceived(
-          event.ActionData,
-          event.CallDetails
+          event.ActionData
         );
       } else {
         console.log('Unhandled ACTION_SUCCESSFUL event type', { event });
@@ -39,25 +41,20 @@ export const lambdaHandler = async (event) => {
 };
 
 async function handleDigitsReceived(
-    action,
-    callDetails
+    action
   ){
-    const context = {
-      transactionId: callDetails.TransactionId,
-      sipRuleId: callDetails.SipRuleId,
-      sipMediaApplicationId: callDetails.SipMediaApplicationId
-    };
     if (action.ReceivedDigits) {
-      const data = {
+      const params = {
+        TableName: tableName,
+        Item:{
         PK: `AUTOMATION${action.ReceivedDigits}`,
         SK: Date.now().toString(),
         expiration: '1403040' // Set expiration time
+        }
       };
   
-      var dynamodb = new AWS.DynamoDB();
-
-    
-      dynamodb.putItem(data, function(err, data) {
+      const docClient = new AWS.DynamoDB.DocumentClient();
+      docClient.putItem(params, function(err, data) {
         if (err) console.log(err, err.stack); 
         else     console.log(data);           
       });
