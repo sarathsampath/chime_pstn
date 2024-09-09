@@ -1,0 +1,21 @@
+{
+  "name": "samplenode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-chime-sdk-meetings": "^3.645.0",
+    "@aws-sdk/client-chime-sdk-voice": "^3.645.0",
+    "aws-sdk": "^2.1690.0",
+    "crypto": "^1.0.1",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "lambda-build": "^1.0.6"
+  }
+}
